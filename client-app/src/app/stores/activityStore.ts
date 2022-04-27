@@ -4,6 +4,7 @@ import { Activity } from "../models/activity";
 
 export default class ActivityStore{
 
+    //map with key id and value activity
     activityRegistry = new Map<string, Activity>();
     selectedActivity: Activity | undefined = undefined;
     editMode = false;
@@ -17,9 +18,21 @@ export default class ActivityStore{
         makeAutoObservable(this)
     }
 
+    //return an array of activities sorted by date
     get activitiesByDate(){
         return Array.from(this.activityRegistry.values()).sort((a, b)=> 
             Date.parse(a.date) - Date.parse(b.date));
+    }
+
+    //array of objects with key = activity.date and for each key there is activity array
+    get groupedActivities(){
+        return Object.entries(
+            this.activitiesByDate.reduce((activities, activity)=>{
+                const date = activity.date;
+                activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+                return activities;
+            },{}as {[key: string]: Activity[]})
+        )
     }
 
     loadActivities = async ()=>{
@@ -51,7 +64,9 @@ export default class ActivityStore{
                 activity = await agent.Activities.details(id);
                 this.setActivity(activity);
                 this.setLoadingInitial(false);
-                this.selectedActivity = activity;
+                runInAction(()=>{
+                    this.selectedActivity = activity;
+                })
                 return activity;
             }catch(error){
                 console.log(error);
