@@ -23,6 +23,7 @@ namespace API
 
             services.AddControllers(opt =>
             {
+                //authorazation policy so that entire app requires authentication to access controllers
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })

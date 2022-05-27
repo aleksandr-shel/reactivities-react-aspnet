@@ -28,6 +28,7 @@ namespace Application.Activities
 
             public async Task<Result<ActivityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
+                //
                 var activity = await _context.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(a => a.Id == request.Id);
