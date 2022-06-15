@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
@@ -18,11 +19,13 @@ namespace Application.Activities
             private readonly DataContext _context;
             private readonly ILogger<List> _logger;
             private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
 
-            public Handler(DataContext context, ILogger<List> logger, IMapper mapper)
+            public Handler(DataContext context, ILogger<List> logger, IMapper mapper, IUserAccessor userAccessor)
             {
                 _logger = logger;
                 _mapper = mapper;
+                _userAccessor = userAccessor;
                 _context = context;
             }
 
@@ -38,7 +41,8 @@ namespace Application.Activities
                 //change the above approach (eager approach) to the below one because query was too big and unefficient
                 //using projectTo, but also can use Select... from Linq
                 var activities = await _context.Activities
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                                new { currentUsername = _userAccessor.GetUsername() })
                     .ToListAsync(cancellationToken);
 
                 return Result<List<ActivityDto>>.Success(activities);
