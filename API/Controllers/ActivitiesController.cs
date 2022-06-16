@@ -1,4 +1,5 @@
 using Application.Activities;
+using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,10 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetActivities(CancellationToken ct)
+        public async Task<IActionResult> GetActivities([FromQuery] ActivityParams param, CancellationToken ct)
         {
-            var result = await Mediator.Send(new List.Query(), ct);
-            return HandleResult(result);
+            var result = await Mediator.Send(new List.Query { Params=param}, ct);
+            return HandlePagedResult(result);
         }
 
         [HttpGet("{id}")] //activities/id
