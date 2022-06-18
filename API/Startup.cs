@@ -53,6 +53,11 @@ namespace API
 
             app.UseRouting();
 
+            //looking for index.html in wwwroot folder 
+            app.UseDefaultFiles();
+            //serving files from wwwroot folder
+            app.UseStaticFiles();
+
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
@@ -63,6 +68,7 @@ namespace API
                 endpoints.MapControllers();
                 //endpoint for signalr
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
