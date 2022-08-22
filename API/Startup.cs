@@ -48,12 +48,13 @@ namespace API
             app.UseXfo(opt=>opt.Deny());
             app.UseCsp(opt=>opt
                 .BlockAllMixedContent()
-                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"))
+                .StyleSources(s => s.Self().CustomSources("sha256-yR2gSI6BIICdRRE2IbNP1SJXeA5NYPbaM32i/Y8eS9o=", "https://fonts.googleapis.com", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:", "https://cdnjs.cloudflare.com"))
                 .FormActions(s =>s.Self())
                 .FrameAncestors(s => s.Self())
-                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
-                .ScriptSources(s => s.Self().CustomSources("sha256-kPx0AsF0oz2kKiZ875xSvv693TBHkQ/0SkMJZnnNpnQ=", "http://conoret.com"))
+                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "https://www.facebook.com", "data:", "https://platform-lookaside.fbsbx.com/"))
+                .ScriptSources(s => s.Self().CustomSources("sha256-KTnfqKV5ClKVL0SsIdfIgdc1YtjPmzbEp2k347nq+HA=", "sha256-kPx0AsF0oz2kKiZ875xSvv693TBHkQ/0SkMJZnnNpnQ=", 
+                    "http://conoret.com", "https://connect.facebook.net/", "sha256-kPx0AsF0oz2kKiZ875xSvv693TBHkQ/0SkMJZnnNpnQ="))
                 );
 
             if (env.IsDevelopment())
